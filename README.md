@@ -15,3 +15,7 @@
 3. GitHub 저장소의 `Settings` → `Pages`
 4. Branch를 `main`, Folder를 `/ (root)`로 설정
 5. 저장 후 생성된 주소 접속
+
+테스트 계정용.
+아이디: demo
+비밀번호: 1234
