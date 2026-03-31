@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>회원가입</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: "Noto Sans KR", Arial, sans-serif;
+    background: linear-gradient(135deg, #eef4ff, #f8fbff);
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    padding: 24px;
+  }
+  .container {
+    width: 100%; max-width: 460px; background: #fff; border-radius: 20px;
+    box-shadow: 0 16px 40px rgba(37,99,235,.12); padding: 32px 28px;
+    border: 1px solid #dbe6f7;
+  }
+  h1 { margin: 0 0 8px; font-size: 28px; color: #1e3a8a; text-align: center; }
+  .sub { text-align: center; color: #64748b; margin-bottom: 24px; font-size: 14px; }
+  .form-group { margin-bottom: 16px; }
+  label { display: block; margin-bottom: 7px; color: #334155; font-weight: 600; font-size: 14px; }
+  input {
+    width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 12px;
+    font-size: 14px; outline: none; transition: .2s;
+  }
+  input:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,.12); }
+  .tel-row { display: flex; gap: 8px; }
+  .tel-row input { flex: 1; }
+  .verify-btn, .submit-btn, .link-btn {
+    border: none; border-radius: 12px; cursor: pointer; font-weight: 700; transition: .2s;
+  }
+  .verify-btn { padding: 0 14px; background: #e0edff; color: #2563eb; white-space: nowrap; }
+  .verify-btn:hover { background: #cfe2ff; }
+  .submit-btn {
+    width: 100%; padding: 13px 14px; background: #2563eb; color: #fff; font-size: 15px; margin-top: 6px;
+  }
+  .submit-btn:hover { background: #1d4ed8; }
+  .links { text-align: center; margin-top: 18px; color: #64748b; font-size: 14px; }
+  .links a { color: #2563eb; text-decoration: none; font-weight: 700; }
+  .hint, .error { font-size: 12px; margin-top: 6px; }
+  .hint { color: #64748b; }
+  .error { color: #dc2626; }
+  .ok { color: #059669; }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>회원가입</h1>
+    <div class="sub">GitHub Pages 데모용 정적 회원가입 화면입니다.</div>
+    <form id="joinForm">
+      <div class="form-group">
+        <label for="name">이름</label>
+        <input type="text" name="name" id="name" placeholder="이름을 입력하세요.">
+      </div>
+      <div class="form-group">
+        <label for="id">아이디(5~12자)</label>
+        <input type="text" name="id" id="id" placeholder="아이디를 입력하세요.">
+        <div id="idMsg" class="hint">영문/숫자 조합을 권장합니다.</div>
+      </div>
+      <div class="form-group">
+        <label for="pw">비밀번호(8~20자)</label>
+        <input type="password" name="pw" id="pw" placeholder="비밀번호를 입력하세요.">
+      </div>
+      <div class="form-group">
+        <label for="pw_check">비밀번호 확인</label>
+        <input type="password" name="pw_check" id="pw_check" placeholder="비밀번호를 확인하세요.">
+      </div>
+      <div class="form-group">
+        <label for="email">이메일</label>
+        <input type="email" name="email" id="email" placeholder="이메일을 입력하세요.">
+      </div>
+      <div class="form-group">
+        <label for="tel">휴대폰번호</label>
+        <div class="tel-row">
+          <input type="tel" name="tel" id="tel" placeholder="휴대폰번호를 입력하세요.">
+          <button class="verify-btn" type="button" id="verify">인증하기</button>
+        </div>
+        <div id="telMsg" class="hint">하이픈 없이 입력해도 됩니다.</div>
+      </div>
+      <div class="form-group">
+        <button class="submit-btn" type="submit">회원가입</button>
+      </div>
+    </form>
+    <div class="links">이미 계정이 있나요? <a href="login.html">로그인</a></div>
+  </div>
+
+<script>
+  const joinForm = document.getElementById('joinForm');
+  const verifyBtn = document.getElementById('verify');
+  const telMsg = document.getElementById('telMsg');
+  const idInput = document.getElementById('id');
+  const idMsg = document.getElementById('idMsg');
+
+  const takenIds = ['admin', 'tester', 'student01'];
+
+  idInput.addEventListener('input', () => {
+    const value = idInput.value.trim();
+    if (!value) {
+      idMsg.textContent = '영문/숫자 조합을 권장합니다.';
+      idMsg.className = 'hint';
+      return;
+    }
+    if (value.length < 5 || value.length > 12) {
+      idMsg.textContent = '아이디는 5~12자로 입력하세요.';
+      idMsg.className = 'error';
+      return;
+    }
+    if (takenIds.includes(value.toLowerCase())) {
+      idMsg.textContent = '이미 사용 중인 아이디입니다. (데모)';
+      idMsg.className = 'error';
+      return;
+    }
+    idMsg.textContent = '사용 가능한 아이디입니다. (데모)';
+    idMsg.className = 'hint ok';
+  });
+
+  verifyBtn.addEventListener('click', () => {
+    const tel = document.getElementById('tel').value.replace(/\D/g, '');
+    if (tel.length < 10) {
+      telMsg.textContent = '휴대폰번호를 다시 확인해주세요.';
+      telMsg.className = 'error';
+      return;
+    }
+    telMsg.textContent = '인증번호가 전송되었습니다. (데모)';
+    telMsg.className = 'hint ok';
+  });
+
+  joinForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = document.getElementById('name').value.trim();
+    const id = document.getElementById('id').value.trim();
+    const pw = document.getElementById('pw').value;
+    const pwCheck = document.getElementById('pw_check').value;
+    const email = document.getElementById('email').value.trim();
+    const tel = document.getElementById('tel').value.trim();
+
+    if (!name || !id || !pw || !pwCheck || !email || !tel) {
+      alert('모든 항목을 입력하세요.');
+      return;
+    }
+    if (id.length < 5 || id.length > 12) {
+      alert('아이디는 5~12자로 입력하세요.');
+      return;
+    }
+    if (pw.length < 8 || pw.length > 20) {
+      alert('비밀번호는 8~20자로 입력하세요.');
+      return;
+    }
+    if (pw !== pwCheck) {
+      alert('비밀번호가 일치하지 않습니다.');
+      return;
+    }
+
+    const users = JSON.parse(localStorage.getItem('demoUsers') || '[]');
+    if (users.some(user => user.id === id)) {
+      alert('이미 가입된 아이디입니다.');
+      return;
+    }
+
+    users.push({ name, id, pw, email, tel, createdAt: new Date().toISOString() });
+    localStorage.setItem('demoUsers', JSON.stringify(users));
+    localStorage.setItem('recentJoinUser', id);
+    alert('회원가입이 성공적으로 완료되었습니다!');
+    location.href = 'login.html';
+  });
+</script>
+</body>
+</html>
